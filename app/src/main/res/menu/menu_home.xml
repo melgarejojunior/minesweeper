@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/show_hide_toggle_menu"
+        android:title="@string/menu_item_show_hide_title"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_eye" />
+
+    <item
+        android:id="@+id/restart_menu"
+        android:title="@string/restart"
+        android:icon="@drawable/ic_refresh"
+        app:showAsAction="always" />
+</menu>

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Campo Minado</string>
+    <string name="menu_item_show_hide_title">Mostrar/Esconder</string>
+    <string name="restart">Restart</string>
 </resources>
