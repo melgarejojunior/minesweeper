@@ -5,6 +5,7 @@ import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import com.juniormelgarejo.minesweeper.R
 import com.juniormelgarejo.minesweeper.databinding.ActivityHomeBinding
 
@@ -20,6 +21,17 @@ class HomeActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         setupToolbar()
+        setupView()
+    }
+
+    private fun setupView() {
+        if (mineAdapter == null) {
+            mineAdapter = MineAdapter()
+        }
+        with(binding.recyclerView) {
+            if (adapter == null) adapter = mineAdapter
+            layoutManager = GridLayoutManager(context, 11)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

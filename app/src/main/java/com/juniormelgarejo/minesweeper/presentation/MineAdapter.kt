@@ -15,4 +15,9 @@ class MineAdapter : RecyclerView.Adapter<FieldViewHolder>() {
     override fun onBindViewHolder(holder: FieldViewHolder, position: Int) {
         holder.bind()
     }
+
+    internal fun setItems(items: List<Int>) {
+        this.items = items
+        notifyDataSetChanged()
+    }
 }
