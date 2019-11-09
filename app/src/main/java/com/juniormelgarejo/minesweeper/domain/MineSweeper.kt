@@ -1,36 +1,38 @@
 package com.juniormelgarejo.minesweeper.domain
 
-import java.util.*
 import kotlin.random.Random
 
 data class MineSweeper(
     private val rows: Int,
     private val columns: Int,
-    private val bombs: Int
+    private val numOfBombs: Int
 ) {
-    private val numOfFields = rows * columns
+    private val numOfFields = (rows * columns)
     private val fields = mutableListOf<Field>()
 
     init {
+        check(numOfBombs < numOfFields) { "Number of bombs should not be greater or equals to row * column" }
         val bombsPositions = createBombs()
-        for (pos in 0..numOfFields) {
+        populate(bombsPositions)
+    }
+
+    private fun populate(bombsPositions: List<Int>) {
+        for (pos in 0 until numOfFields) {
             fields.add(
-                Field.fromAbsolutePosition(pos, rows, bombsPositions.contains(pos)).apply {
-                    setNumOfBombsAround(bombsPositions)
-                }
+                Field.fromAbsolutePosition(
+                    pos,
+                    columns,
+                    bombsPositions.contains(pos),
+                    bombsPositions
+                )
             )
         }
     }
 
-    private fun createBombs(): MutableSet<Int> {
+    private fun createBombs(): List<Int> {
         val bombsSet = mutableSetOf<Int>()
-        val randomSeed = Random(Date().time)
-        repeat(bombs) {
-            var possiblePos = randomSeed.nextInt(numOfFields - 1)
-            while (bombsSet.contains(possiblePos)) possiblePos =
-                Random(Date().time).nextInt(numOfFields - 1)
-            bombsSet.add(possiblePos)
-        }
-        return bombsSet
+        while (bombsSet.size != numOfBombs)
+            bombsSet.add(Random.nextInt(numOfFields))
+        return bombsSet.sorted()
     }
 }
