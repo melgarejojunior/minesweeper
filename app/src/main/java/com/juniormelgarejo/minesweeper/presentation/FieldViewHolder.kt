@@ -11,9 +11,6 @@ class FieldViewHolder private constructor(
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
-    private var visible = true
-
-
     fun bind(_isFieldsVisible: Boolean) {
         with(binding) {
             cover.showValue(_isFieldsVisible)
