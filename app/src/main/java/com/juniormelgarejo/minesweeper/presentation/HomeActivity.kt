@@ -30,8 +30,9 @@ class HomeActivity : AppCompatActivity() {
         }
         with(binding.recyclerView) {
             if (adapter == null) adapter = mineAdapter
-            layoutManager = GridLayoutManager(context, 11)
+            layoutManager = GridLayoutManager(context, 10)
         }
+        mineAdapter?.setItems((1..130).toList())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
