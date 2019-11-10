@@ -4,27 +4,32 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.juniormelgarejo.minesweeper.databinding.ItemFieldBinding
+import com.juniormelgarejo.minesweeper.domain.Field
 import com.juniormelgarejo.minesweeper.utils.showValue
 
 class FieldViewHolder private constructor(
-    private val binding: ItemFieldBinding
+    private val binding: ItemFieldBinding,
+    private val onClicked: (Field) -> Boolean
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(_isFieldsVisible: Boolean) {
-        with(binding) {
-            cover.showValue(_isFieldsVisible)
+    fun bind(field: Field, _isFieldsVisible: Boolean) {
+        binding.field = field
+        with(binding.cover) {
+            showValue(_isFieldsVisible)
+            setOnClickListener { binding.cover.showValue(!onClicked(field)) }
         }
     }
 
     companion object {
-        fun inflate(parent: ViewGroup): FieldViewHolder {
+        fun inflate(parent: ViewGroup, onClicked: (Field) -> Boolean): FieldViewHolder {
             return FieldViewHolder(
                 ItemFieldBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
-                )
+                ),
+                onClicked
             )
         }
     }

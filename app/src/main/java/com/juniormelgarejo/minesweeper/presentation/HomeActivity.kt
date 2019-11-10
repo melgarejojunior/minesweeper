@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.juniormelgarejo.minesweeper.R
 import com.juniormelgarejo.minesweeper.databinding.ActivityHomeBinding
+import com.juniormelgarejo.minesweeper.domain.MineSweeper
 import com.juniormelgarejo.minesweeper.utils.consume
 import com.juniormelgarejo.minesweeper.utils.observeEvent
 import com.juniormelgarejo.minesweeper.utils.safeIf
@@ -61,8 +63,10 @@ class HomeActivity : AppCompatActivity() {
         with(binding.recyclerView) {
             if (adapter == null) adapter = mineAdapter
             layoutManager = GridLayoutManager(context, 10)
+            addItemDecoration(object : RecyclerView.ItemDecoration() {
+            })
         }
-        mineAdapter?.setItems((1..130).toList())
+        mineAdapter?.setItems(MineSweeper(13, 10, 15).fields)
     }
 
     private fun onNextRedrawOptions(shouldRedraw: Boolean?) {

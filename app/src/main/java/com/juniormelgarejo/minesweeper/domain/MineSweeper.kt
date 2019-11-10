@@ -7,8 +7,10 @@ data class MineSweeper(
     private val columns: Int,
     private val numOfBombs: Int
 ) {
+    val fields: List<Field> get() = _fields
+
     private val numOfFields = (rows * columns)
-    private val fields = mutableListOf<Field>()
+    private val _fields = mutableListOf<Field>()
 
     init {
         check(numOfBombs < numOfFields) { "Number of bombs should not be greater or equals to row * column" }
@@ -18,7 +20,7 @@ data class MineSweeper(
 
     private fun populate(bombsPositions: List<Int>) {
         for (pos in 0 until numOfFields) {
-            fields.add(
+            _fields.add(
                 Field.fromAbsolutePosition(
                     pos,
                     columns,
