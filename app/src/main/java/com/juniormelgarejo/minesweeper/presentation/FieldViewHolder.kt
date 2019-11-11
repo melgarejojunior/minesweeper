@@ -13,10 +13,10 @@ class FieldViewHolder private constructor(
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(field: Field, _isFieldsVisible: Boolean) {
+    fun bind(field: Field, visible: Boolean) {
         binding.field = field
         with(binding.cover) {
-            showValue(_isFieldsVisible)
+            showValue(visible)
             setOnClickListener { binding.cover.showValue(!onClicked(field)) }
         }
     }

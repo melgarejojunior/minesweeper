@@ -17,7 +17,10 @@ object DataBindingUtils {
                 bombsAround == 0 -> ""
                 else -> bombsAround.toString()
             }
-            if (!isBomb) setTextColor(resolveColor(context, bombsAround))
+            setTextColor(
+                if (!isBomb) resolveColor(context, bombsAround)
+                else context.colorCompat(android.R.color.black)
+            )
         }
     }
 
