@@ -2,6 +2,7 @@ package com.juniormelgarejo.minesweeper.presentation
 
 import androidx.lifecycle.*
 import com.juniormelgarejo.minesweeper.domain.Field
+import com.juniormelgarejo.minesweeper.domain.GameStatus
 import com.juniormelgarejo.minesweeper.domain.MineSweeper
 import com.juniormelgarejo.minesweeper.utils.Event
 
@@ -30,6 +31,21 @@ class HomeViewModel : LifecycleObserver, ViewModel() {
     internal fun onFirstItemClicked(position: Int) {
         currentMineSweeper?.create(position)
         _initMineSweeper.postValue(currentMineSweeper?.fields)
+    }
+
+    internal fun updateGameStatus(status: GameStatus) {
+        when(status) {
+            GameStatus.GAME_OVER -> notifyGameOver()
+            GameStatus.WINNER -> notifyWinner()
+        }
+    }
+
+    private fun notifyWinner() {
+
+    }
+
+    private fun notifyGameOver() {
+
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)

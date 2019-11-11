@@ -67,7 +67,10 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupView() {
         if (mineAdapter == null) {
-            mineAdapter = MineAdapter(viewModel::onFirstItemClicked)
+            mineAdapter = MineAdapter(
+                viewModel::onFirstItemClicked,
+                viewModel::updateGameStatus
+                )
         }
         with(binding.recyclerView) {
             if (adapter == null) adapter = mineAdapter

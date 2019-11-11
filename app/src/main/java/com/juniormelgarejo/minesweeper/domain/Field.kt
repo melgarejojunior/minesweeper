@@ -19,6 +19,16 @@ data class Field(
 
     private fun Int.bombRange() = this.dec()..this.inc()
 
+    fun getAdjacents(): List<Pair<Int, Int>> {
+        val pairs = mutableListOf<Pair<Int, Int>>()
+        for (i in row.bombRange()) {
+            for (j in row.bombRange()) {
+                if (i >= 0 && j >= 0) pairs.add(i to j)
+            }
+        }
+        return pairs
+    }
+
     companion object {
         fun fromAbsolutePosition(
             position: Int,
