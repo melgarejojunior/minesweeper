@@ -33,5 +33,9 @@ data class Field(
                 isBomb = isBomb
             ).apply { setNumOfBombsAround(bombsSet, numOfColumns) }
         }
+
+        fun empty(position: Int): Field {
+            return Field(position, 0, 0, false)
+        }
     }
 }

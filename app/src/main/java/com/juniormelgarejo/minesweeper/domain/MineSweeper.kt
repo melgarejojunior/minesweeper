@@ -5,17 +5,32 @@ import kotlin.random.Random
 data class MineSweeper(
     private val rows: Int,
     private val columns: Int,
-    private val numOfBombs: Int
+    private val numOfBombs: Int,
+    private val empty: Boolean = false
 ) {
     val fields: List<Field> get() = _fields
 
     private val numOfFields = (rows * columns)
     private val _fields = mutableListOf<Field>()
+    private var firstPlayed: Int = -1
 
     init {
         check(numOfBombs < numOfFields) { "Number of bombs should not be greater or equals to row * column" }
+    }
+
+    fun create(firstPlayed: Int) {
+        this.firstPlayed = firstPlayed
         val bombsPositions = createBombs()
         populate(bombsPositions)
+
+    }
+
+    fun placeholder(): List<Field> {
+        return mutableListOf<Field>().apply {
+            repeat(numOfFields) {
+                add(Field.empty(it))
+            }
+        }
     }
 
     private fun populate(bombsPositions: List<Int>) {
@@ -34,7 +49,8 @@ data class MineSweeper(
     private fun createBombs(): List<Int> {
         val bombsSet = mutableSetOf<Int>()
         while (bombsSet.size != numOfBombs)
-            bombsSet.add(Random.nextInt(numOfFields))
+            Random.nextInt(numOfFields).run { if (this != firstPlayed) bombsSet.add(this) }
         return bombsSet.sorted()
     }
+
 }

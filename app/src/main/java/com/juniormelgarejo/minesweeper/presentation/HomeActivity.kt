@@ -10,8 +10,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.juniormelgarejo.minesweeper.R
 import com.juniormelgarejo.minesweeper.databinding.ActivityHomeBinding
-import com.juniormelgarejo.minesweeper.domain.MineSweeper
+import com.juniormelgarejo.minesweeper.domain.Field
 import com.juniormelgarejo.minesweeper.utils.consume
+import com.juniormelgarejo.minesweeper.utils.observeAction
 import com.juniormelgarejo.minesweeper.utils.observeEvent
 import com.juniormelgarejo.minesweeper.utils.safeIf
 
@@ -54,11 +55,19 @@ class HomeActivity : AppCompatActivity() {
 
     private fun subscribeUi() {
         viewModel.redrawOptionsMenu.observeEvent(this, ::onNextRedrawOptions)
+        viewModel.restart.observeEvent(this, ::onNextRestart)
+        viewModel.initMineSweeper.observeAction(this, ::onNextMineSweeper)
+    }
+
+    private fun onNextRestart(shouldRestart: Boolean?) {
+        safeIf(shouldRestart) {
+            mineAdapter?.restart()
+        }
     }
 
     private fun setupView() {
         if (mineAdapter == null) {
-            mineAdapter = MineAdapter()
+            mineAdapter = MineAdapter(viewModel::onFirstItemClicked)
         }
         with(binding.recyclerView) {
             if (adapter == null) adapter = mineAdapter
@@ -66,7 +75,6 @@ class HomeActivity : AppCompatActivity() {
             addItemDecoration(object : RecyclerView.ItemDecoration() {
             })
         }
-        mineAdapter?.setItems(MineSweeper(13, 10, 15).fields)
     }
 
     private fun onNextRedrawOptions(shouldRedraw: Boolean?) {
@@ -74,6 +82,10 @@ class HomeActivity : AppCompatActivity() {
             mineAdapter?.showAllFields()
             invalidateOptionsMenu()
         }
+    }
+
+    private fun onNextMineSweeper(fields: List<Field>?) {
+        mineAdapter?.setItems(fields ?: emptyList())
     }
 
     private fun resolveMenuRes(): Int {
