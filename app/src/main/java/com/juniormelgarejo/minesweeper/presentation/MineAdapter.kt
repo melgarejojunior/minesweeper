@@ -74,7 +74,7 @@ class MineAdapter(
         updateGameStatus(
             when {
                 field.isBomb -> GameStatus.GAME_OVER
-                items.size - openedItems.size == 15 -> GameStatus.WINNER
+                items.size - openedItems.size == mineSweeper?.numOfBombs -> GameStatus.WINNER
                 else -> GameStatus.ON_GOING
             }
         )

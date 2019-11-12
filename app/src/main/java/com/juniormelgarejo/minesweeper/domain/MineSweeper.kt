@@ -5,7 +5,7 @@ import kotlin.random.Random
 data class MineSweeper(
     private val rows: Int,
     private val columns: Int,
-    private val numOfBombs: Int,
+    val numOfBombs: Int,
     private val empty: Boolean = false
 ) {
     val fields: List<Field> get() = _fields
