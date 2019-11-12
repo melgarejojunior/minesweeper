@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Minesweeper</string>
-    <string name="menu_item_show_hide_title">Mostrar/Esconder</string>
+    <string name="menu_item_show_hide_title">Show/Hide</string>
     <string name="restart">Restart</string>
     <string name="bomb_marker" translatable="false">*</string>
-    <string name="play_again">Jogar novamente</string>
+    <string name="play_again">Play Again</string>
     <string name="lost_game">You Lose</string>
     <string name="won_game">You win</string>
 </resources>
