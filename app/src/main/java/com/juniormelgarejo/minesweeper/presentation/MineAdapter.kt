@@ -50,7 +50,10 @@ class MineAdapter(
         this.openedItems = mutableSetOf()
     }
 
-
+    /**
+     * O método [resolveOnItemClicked] espera o campo que foi clicado/alterado e retorna um boolean,
+     * que determina se deve ou não mostrar o valor do quadrado em questão.
+     * */
     private fun resolveOnItemClicked(field: Field): Boolean {
         if (openedItems.size == 0) populate(field)
         else {
@@ -80,6 +83,10 @@ class MineAdapter(
         )
     }
 
+    /**
+     * O método [openAdjacentFields] recebe um Field e procura por quadrados adjacentes que tenham 0
+     * bombas em volta para também abri-los
+     * */
     private fun openAdjacentFields(field: Field) {
         field.getBorders().forEach { pair ->
             items.findByRelativePosition(pair)?.let { field ->

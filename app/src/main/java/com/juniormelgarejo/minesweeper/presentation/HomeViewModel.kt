@@ -34,6 +34,9 @@ class HomeViewModel : LifecycleObserver, ViewModel() {
         when (status) {
             GameStatus.GAME_OVER -> notifyGameOver()
             GameStatus.WINNER -> notifyWinner()
+            else -> {
+                // Nothing to do
+            }
         }
     }
 

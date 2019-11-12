@@ -1,5 +1,11 @@
 package com.juniormelgarejo.minesweeper.domain
 
+/**
+ * A classe [Field] representa cada quadrado dentro do campo minado e guarda informações,
+ * como por exemplo, posição linear (absoluta), linha e coluna (relativa) e se o quadrado é bomba e
+ * quantas bombas têm ao redor de si.
+ * Além de comseguir retornar o pares relativos aos quadrados adjacentes.
+ * */
 data class Field(
     val position: Int,
     val row: Int,

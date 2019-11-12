@@ -2,11 +2,18 @@ package com.juniormelgarejo.minesweeper.domain
 
 import kotlin.random.Random
 
+/**
+ * Principal entidade do programa
+ * Guarda os dados sobre quantidade de linhas e colunas, e quantidade de bombas
+ * A partir disso, essa classe usa o método [placeholder] para criar quadrados vazios e esperar o primeiro clique
+ * Após o primeiro clique o método [create] que espera a posição desse clique, é invocado e gera as
+ * bombas aleatoriamente, preenchendo assim o campo minado.
+ * */
+
 data class MineSweeper(
     private val rows: Int,
     private val columns: Int,
-    val numOfBombs: Int,
-    private val empty: Boolean = false
+    val numOfBombs: Int
 ) {
     val fields: List<Field> get() = _fields
 
