@@ -83,11 +83,10 @@ class MineAdapter(
     private fun openAdjacentFields(field: Field) {
         field.getBorders().forEach { pair ->
             items.findByRelativePosition(pair)?.let { field ->
-                if (openedItems.findByRelativePosition(pair) == null) {
-                    if (!field.isBomb && field.bombsAround == 0) {
-                        openedItems.add(field)
-                        notifyItemChanged(field.position)
-                    }
+                if (openedItems.findByRelativePosition(pair) == null && !field.isBomb && field.bombsAround == 0) {
+                    openedItems.add(field)
+                    notifyItemChanged(field.position)
+                    resolveOnItemClicked(field)
                 }
             }
         }
