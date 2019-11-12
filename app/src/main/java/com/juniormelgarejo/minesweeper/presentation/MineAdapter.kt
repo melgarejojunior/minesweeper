@@ -4,9 +4,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.juniormelgarejo.minesweeper.domain.Field
 import com.juniormelgarejo.minesweeper.domain.GameStatus
+import com.juniormelgarejo.minesweeper.domain.MineSweeper
 
 class MineAdapter(
-    private val onFirstItemClicked: (Int) -> Unit,
     private val updateGameStatus: (GameStatus) -> Unit
 ) : RecyclerView.Adapter<FieldViewHolder>() {
 
@@ -16,7 +16,8 @@ class MineAdapter(
 
     private var _isFieldsVisible: Boolean = false
     private var items: List<Field> = emptyList()
-    private var openedItems = mutableListOf<Field>()
+    private var openedItems = mutableSetOf<Field>()
+    private var mineSweeper: MineSweeper? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FieldViewHolder {
         return FieldViewHolder.inflate(parent, ::resolveOnItemClicked)
@@ -31,8 +32,9 @@ class MineAdapter(
         )
     }
 
-    internal fun setItems(items: List<Field>) {
-        this.items = items
+    internal fun setItems(mineSweeper: MineSweeper) {
+        this.mineSweeper = mineSweeper
+        this.items = mineSweeper.placeholder()
         notifyDataSetChanged()
     }
 
@@ -45,37 +47,53 @@ class MineAdapter(
 
     internal fun restart() {
         this.items = emptyList()
-        this.openedItems = mutableListOf()
+        this.openedItems = mutableSetOf()
     }
 
 
-    private fun resolveOnItemClicked(it: Field): Boolean {
-        openedItems.add(it)
-        if (openedItems.size == 1) onFirstItemClicked(it.position)
-        else openAdjacentFields(it)
-        gameStatus(it)
+    private fun resolveOnItemClicked(field: Field): Boolean {
+        if (openedItems.size == 0) populate(field)
+        else {
+            openedItems.add(field)
+            if (items[field.position].bombsAround == 0) openAdjacentFields(field)
+            gameStatus(field)
+        }
         return _isFieldsVisible
+    }
+
+    private fun populate(field: Field) {
+        mineSweeper?.create(field.position)
+        mineSweeper?.fields?.let {
+            this.items = it
+            openedItems.add(it[field.position])
+            notifyDataSetChanged()
+        }
     }
 
     private fun gameStatus(field: Field) {
         updateGameStatus(
             when {
                 field.isBomb -> GameStatus.GAME_OVER
-                openedItems.size == 15 -> GameStatus.WINNER
+                items.size - openedItems.size == 15 -> GameStatus.WINNER
                 else -> GameStatus.ON_GOING
             }
         )
     }
 
     private fun openAdjacentFields(field: Field) {
-        field.getAdjacents().forEach { pair ->
-            items.find { it.row == pair.first && it.column == pair.second }?.let {
-                if (it in openedItems) return
-                if (!it.isBomb && it.bombsAround == 0) {
-                    openedItems.add(it)
-                    notifyItemChanged(it.position)
+        field.getBorders().forEach { pair ->
+            items.findByRelativePosition(pair)?.let { field ->
+                if (openedItems.findByRelativePosition(pair) == null) {
+                    if (!field.isBomb && field.bombsAround == 0) {
+                        openedItems.add(field)
+                        notifyItemChanged(field.position)
+                    }
                 }
             }
         }
+    }
+
+    private fun Collection<Field>.findByRelativePosition(pair: Pair<Int, Int>): Field? {
+        return find { it.row == pair.first && it.column == pair.second }
     }
 }

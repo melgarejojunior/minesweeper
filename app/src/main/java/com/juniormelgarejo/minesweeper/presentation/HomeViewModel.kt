@@ -1,7 +1,6 @@
 package com.juniormelgarejo.minesweeper.presentation
 
 import androidx.lifecycle.*
-import com.juniormelgarejo.minesweeper.domain.Field
 import com.juniormelgarejo.minesweeper.domain.GameStatus
 import com.juniormelgarejo.minesweeper.domain.MineSweeper
 import com.juniormelgarejo.minesweeper.utils.Event
@@ -11,13 +10,16 @@ class HomeViewModel : LifecycleObserver, ViewModel() {
     val redrawOptionsMenu: LiveData<Event<Boolean>> get() = _redrawOptionsMenu
     private val _redrawOptionsMenu = MutableLiveData<Event<Boolean>>()
 
-    val initMineSweeper: LiveData<List<Field>> get() = _initMineSweeper
-    private val _initMineSweeper = MutableLiveData<List<Field>>()
+    val initMineSweeper: LiveData<MineSweeper> get() = _initMineSweeper
+    private val _initMineSweeper = MutableLiveData<MineSweeper>()
 
     val restart: LiveData<Event<Boolean>> get() = _restart
     private val _restart = MutableLiveData<Event<Boolean>>()
 
-    var currentMineSweeper: MineSweeper? = null
+    val endOfGame: LiveData<Boolean> get() = _endOfGame
+    private val _endOfGame = MutableLiveData<Boolean>()
+
+    private var currentMineSweeper: MineSweeper? = null
 
     internal fun onRestartClicked() {
         _restart.postValue(Event(true))
@@ -28,32 +30,25 @@ class HomeViewModel : LifecycleObserver, ViewModel() {
         _redrawOptionsMenu.postValue(Event(true))
     }
 
-    internal fun onFirstItemClicked(position: Int) {
-        currentMineSweeper?.create(position)
-        _initMineSweeper.postValue(currentMineSweeper?.fields)
-    }
-
     internal fun updateGameStatus(status: GameStatus) {
-        when(status) {
+        when (status) {
             GameStatus.GAME_OVER -> notifyGameOver()
             GameStatus.WINNER -> notifyWinner()
         }
     }
 
     private fun notifyWinner() {
-
+        _endOfGame.postValue(true)
     }
 
     private fun notifyGameOver() {
-
+        _endOfGame.postValue(false)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     private fun onCreate() {
         currentMineSweeper = MineSweeper(13, 10, 15).also {
-            _initMineSweeper.postValue(
-                it.placeholder()
-            )
+            _initMineSweeper.postValue(it)
         }
 
     }

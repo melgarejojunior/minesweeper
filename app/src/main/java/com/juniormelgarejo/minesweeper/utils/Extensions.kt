@@ -18,6 +18,10 @@ fun View.showValue(show: Boolean) {
         )
 }
 
+fun View.setVisible(visible: Boolean) {
+    visibility = if(visible) View.VISIBLE else View.GONE
+}
+
 fun Context.colorCompat(@ColorRes colorId: Int) = ContextCompat.getColor(this, colorId)
 
 

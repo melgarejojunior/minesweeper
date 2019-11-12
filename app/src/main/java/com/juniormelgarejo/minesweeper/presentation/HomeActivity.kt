@@ -10,11 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.juniormelgarejo.minesweeper.R
 import com.juniormelgarejo.minesweeper.databinding.ActivityHomeBinding
-import com.juniormelgarejo.minesweeper.domain.Field
-import com.juniormelgarejo.minesweeper.utils.consume
-import com.juniormelgarejo.minesweeper.utils.observeAction
-import com.juniormelgarejo.minesweeper.utils.observeEvent
-import com.juniormelgarejo.minesweeper.utils.safeIf
+import com.juniormelgarejo.minesweeper.domain.MineSweeper
+import com.juniormelgarejo.minesweeper.utils.*
 
 class HomeActivity : AppCompatActivity() {
 
@@ -54,23 +51,22 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun subscribeUi() {
+        viewModel.initMineSweeper.observeAction(this, ::onNextMineSweeper)
+        viewModel.endOfGame.observeAction(this) { it?.let { showEndOfGame(it) } }
         viewModel.redrawOptionsMenu.observeEvent(this, ::onNextRedrawOptions)
         viewModel.restart.observeEvent(this, ::onNextRestart)
-        viewModel.initMineSweeper.observeAction(this, ::onNextMineSweeper)
     }
 
     private fun onNextRestart(shouldRestart: Boolean?) {
         safeIf(shouldRestart) {
             mineAdapter?.restart()
+            binding.endGameContainer.setVisible(false)
         }
     }
 
     private fun setupView() {
         if (mineAdapter == null) {
-            mineAdapter = MineAdapter(
-                viewModel::onFirstItemClicked,
-                viewModel::updateGameStatus
-                )
+            mineAdapter = MineAdapter(viewModel::updateGameStatus)
         }
         with(binding.recyclerView) {
             if (adapter == null) adapter = mineAdapter
@@ -78,6 +74,7 @@ class HomeActivity : AppCompatActivity() {
             addItemDecoration(object : RecyclerView.ItemDecoration() {
             })
         }
+        binding.tryAgainButton.setOnClickListener { viewModel.onRestartClicked() }
     }
 
     private fun onNextRedrawOptions(shouldRedraw: Boolean?) {
@@ -87,8 +84,8 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun onNextMineSweeper(fields: List<Field>?) {
-        mineAdapter?.setItems(fields ?: emptyList())
+    private fun onNextMineSweeper(mineSweeper: MineSweeper?) {
+        mineSweeper?.let { mineAdapter?.setItems(it) }
     }
 
     private fun resolveMenuRes(): Int {
@@ -96,6 +93,13 @@ class HomeActivity : AppCompatActivity() {
             R.menu.menu_home_invisible
         else
             R.menu.menu_home_visible
+    }
+
+    private fun showEndOfGame(isWinner: Boolean) {
+        binding.endGameContainer.setVisible(true)
+        binding.statusText.text = getString(
+            if (isWinner) R.string.won_game else R.string.lost_game
+        )
     }
 
     private fun setupToolbar() {

@@ -8,6 +8,16 @@ data class Field(
     var bombsAround: Int = 0
 ) {
 
+    fun getBorders(): List<Pair<Int, Int>> {
+        val pairs = mutableListOf<Pair<Int, Int>>()
+        for (i in row.bombRange()) {
+            for (j in column.bombRange()) {
+                if ((i >= 0 && j >= 0)) pairs.add(i to j)
+            }
+        }
+        return pairs
+    }
+
     private fun setNumOfBombsAround(listOfBombs: List<Int>, numOfColumns: Int) {
         if (isBomb) return
         listOfBombs.forEach { bombPos ->
@@ -18,16 +28,6 @@ data class Field(
     }
 
     private fun Int.bombRange() = this.dec()..this.inc()
-
-    fun getAdjacents(): List<Pair<Int, Int>> {
-        val pairs = mutableListOf<Pair<Int, Int>>()
-        for (i in row.bombRange()) {
-            for (j in row.bombRange()) {
-                if (i >= 0 && j >= 0) pairs.add(i to j)
-            }
-        }
-        return pairs
-    }
 
     companion object {
         fun fromAbsolutePosition(

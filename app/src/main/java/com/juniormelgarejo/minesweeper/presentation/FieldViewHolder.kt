@@ -17,7 +17,10 @@ class FieldViewHolder private constructor(
         binding.field = field
         with(binding.cover) {
             showValue(visible)
-            setOnClickListener { binding.cover.showValue(!onClicked(field)) }
+            setOnClickListener {
+                val shouldShow = !onClicked(field)
+                binding.cover.showValue(shouldShow)
+            }
         }
     }
 
