@@ -25,14 +25,14 @@ data class MineSweeper(
         check(numOfBombs < numOfFields) { "Number of bombs should not be greater or equals to row * column" }
     }
 
-    fun create(firstPlayed: Int) {
+    internal fun create(firstPlayed: Int) {
         this.firstPlayed = firstPlayed
         val bombsPositions = createBombs()
         populate(bombsPositions)
 
     }
 
-    fun placeholder(): List<Field> {
+    internal fun placeholder(): List<Field> {
         return mutableListOf<Field>().apply {
             repeat(numOfFields) {
                 add(Field.empty(it))
