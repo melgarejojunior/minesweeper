@@ -6,7 +6,7 @@ package com.juniormelgarejo.minesweeper.domain
  * quantas bombas têm ao redor de si.
  * Além de comseguir retornar o pares relativos aos quadrados adjacentes.
  * */
-data class Field(
+data class Field private constructor(
     val position: Int,
     val row: Int,
     val column: Int,
