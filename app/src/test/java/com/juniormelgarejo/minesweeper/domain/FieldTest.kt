@@ -4,37 +4,59 @@ import org.junit.Test
 
 class FieldTest {
 
-    private val numOfBombs = 3
-    private val numOfRows = 4
     private val numOfColumns = 4
     private val bombList = listOf(1, 14, 15)
 
     @Test
+    fun positionCreation() {
+        //Given
+        val position = 6
+        val field = Field.fromAbsolutePosition(position, numOfColumns, bombList.contains(position), bombList)
+        //When
+        val resultColumn = field.column
+        val resultRow = field.row
+        val resultIsBomb = field.isBomb
+        //Then
+        assert(resultColumn == 2 && resultRow == 1 && !resultIsBomb)
+    }
+
+    @Test
     fun getBorders() {
         //Given
-        val field = Field.fromAbsolutePosition(11, 4, false, bombList)
+        val position = 8
+        val field = Field.fromAbsolutePosition(position, numOfColumns, bombList.contains(position), bombList)
         //When
         val result = field.getBorders().toSet()
         //Then
         val assertionResult = setOf(
-            1 to 2,
-            1 to 3,
-            2 to 2,
-            3 to 2,
-            3 to 3
+            1 to 0,
+            1 to 1,
+            2 to 1,
+            3 to 0,
+            3 to 1
         )
         assert(result.containsAll(assertionResult) && assertionResult.containsAll(result))
     }
 
     @Test
     fun getPosition() {
+        // Given
+        val position = 8
+        val field = Field.fromAbsolutePosition(position, numOfColumns, bombList.contains(position), bombList)
+        // When
+        val result = field.position
+        // Then
+        assert(result == 8)
     }
 
     @Test
     fun getBombsAround() {
-    }
-
-    @Test
-    fun setBombsAround() {
+        // Given
+        val position = 10
+        val field = Field.fromAbsolutePosition(position, numOfColumns, bombList.contains(position), bombList)
+        // When
+        val result = field.bombsAround
+        // Then
+        assert(result == 2)
     }
 }

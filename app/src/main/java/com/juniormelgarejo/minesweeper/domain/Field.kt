@@ -18,7 +18,7 @@ data class Field private constructor(
         val pairs = mutableListOf<Pair<Int, Int>>()
         for (i in row.bombRange()) {
             for (j in column.bombRange()) {
-                if ((i >= 0 && j >= 0)) pairs.add(i to j)
+                if ((i >= 0 && j >= 0) && (i != row || j != column)) pairs.add(i to j)
             }
         }
         return pairs
